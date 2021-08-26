@@ -40,7 +40,7 @@ with col2:
     
 
 #down_payment = home_value* (down_payment_percent / 100)
-loan_amount = home_value #- down_payment
+loan_amount = total_mortgage #- down_payment
 payment_months = payment_years*12
 interest_rate = interest_rate / 100
 periodic_interest_rate = (1+interest_rate)**(1/12) - 1
