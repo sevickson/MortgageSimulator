@@ -1,3 +1,4 @@
+numpy_financial
 numpy
 #==1.19.5
 plotly
