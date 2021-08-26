@@ -11,26 +11,32 @@ from plotly.subplots import make_subplots
 import numpy as np
 
 st.set_page_config(
-    page_title="Mortgage Loan Simulator")
+    page_title="Hypotheek Betaling Simulator")
 
-st.title("Mortgage Loan Simulator")
+st.title("Hypotheek Betaling Simulator")
 
-st.header("**Mortgage Details**")
+st.header("**Hypotheekgegevens**")
 col1, col2 = st.beta_columns(2)
 
 with col1:
-    st.subheader("Home Value")
-    home_value = st.number_input("Enter your home value($): ", min_value=0.0, format='%f')
+    st.subheader("Totaal Hypotheekbedrag")
+    total_mortgage = st.number_input("Vul in totale hypotheekbedrag (€): ", min_value=0.0, format='%f')
     
-    st.subheader("Loan Interest Rate")
-    interest_rate = st.number_input("Enter your home loan interest rate(%): ", min_value=0.0, format='%f')
+    st.subheader("Hypotheekrente per jaar")
+    interest_rate = st.number_input("Vul in je hypotheekrente in rentevast periode(%): ", min_value=0.0, format='%f')
+
+    st.subheader("Rentevastperiode")
+    interest_rate_period = st.number_input("Vul in je rentevast periode(%): ", min_value=0.0, format='%f')
 
 with col2:
-    #st.subheader("Down Payment Percent")
-    #down_payment_percent = st.number_input("Enter your down payment percent(%): ", min_value=0.0, format='%f')
+    st.subheader("Waarde woning")
+    home_value = st.number_input("Waarde van de woning(€): ", min_value=0.0, format='%f')
     
-    st.subheader("Target Payment Period (Years)")
-    payment_years = st.number_input("Enter your target payment period (years): ", min_value=3, format='%d')
+    st.subheader("Looptijd hypotheek (jaren)")
+    payment_years = st.number_input("Vul in totale looptijd van hypotheek (jaren): ", min_value=3, format='%d')
+
+    st.subheader("Stijging na rentevastperiode")
+    interest_rate_after = st.number_input("Vul in mogelijke stijging na rentevastperiode(%): ", min_value=0.0, format='%f')
     
 
 #down_payment = home_value* (down_payment_percent / 100)
@@ -40,9 +46,9 @@ interest_rate = interest_rate / 100
 periodic_interest_rate = (1+interest_rate)**(1/12) - 1
 monthly_installment = -1*np.pmt(periodic_interest_rate , payment_months, loan_amount)
 
-#st.subheader("**Down Payment:** $" + str(round(down_payment,2)))
-st.subheader("**Loan Amount:** $" + str(round(loan_amount, 2)))
-st.subheader("**Monthly Installment:** $" + str(round(monthly_installment, 2)))
+#st.subheader("**Down Payment:** €" + str(round(down_payment,2)))
+st.subheader("**Loan Amount:** €" + str(round(loan_amount, 2)))
+st.subheader("**Monthly Installment:** €" + str(round(monthly_installment, 2)))
 
 st.markdown("---")
 
@@ -85,7 +91,7 @@ fig = make_subplots(
 fig.add_trace(
         go.Table(
             header=dict(
-                    values=['Month', 'Principal Payment($)', 'Interest Payment($)', 'Remaining Principal($)']
+                    values=['Month', 'Principal Payment(€)', 'Interest Payment(€)', 'Remaining Principal(€)']
                 ),
             cells = dict(
                     values =[month_num, principal_pay_arr, interest_pay_arr, principal_remaining]
@@ -114,7 +120,7 @@ fig.append_trace(
 
 fig.update_layout(title='Mortgage Installment Payment Over Months',
                    xaxis_title='Month',
-                   yaxis_title='Amount($)',
+                   yaxis_title='Amount(€)',
                    height= 800,
                    width = 1200,
                    legend= dict(
