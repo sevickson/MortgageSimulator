@@ -24,10 +24,10 @@ with col1:
     total_mortgage = st.number_input("Vul in totale hypotheekbedrag (€): ", min_value=0.0, format='%f')
     
     st.subheader("Hypotheekrente per jaar")
-    interest_rate = st.number_input("Vul in je hypotheekrente in rentevast periode(%): ", min_value=0.0, format='%f')
+    interest_rate = st.number_input("Vul in je hypotheekrente in rentevast periode (%): ", min_value=0.0, format='%f')
 
     st.subheader("Rentevastperiode")
-    interest_rate_period = st.number_input("Vul in je rentevast periode(%): ", min_value=0.0, format='%f')
+    interest_rate_period = st.number_input("Vul in je rentevast periode (jaren): ", min_value=0.0, format='%f')
 
 with col2:
     #st.subheader("Waarde woning")
@@ -37,12 +37,13 @@ with col2:
     payment_years = st.number_input("Vul in totale looptijd van hypotheek (jaren): ", min_value=30, format='%d')
 
     st.subheader("Stijging na rentevastperiode")
-    interest_rate_after = st.number_input("Vul in mogelijke stijging na rentevastperiode(%): ", min_value=0.0, format='%f')
+    interest_rate_after = st.number_input("Vul in mogelijke stijging na rentevastperiode (%): ", min_value=0.0, format='%f')
     
 
 #down_payment = home_value* (down_payment_percent / 100)
 loan_amount = total_mortgage #- down_payment
 payment_months = int(payment_years*12)
+payment_months_after = int(interest_rate_period*12)
 interest_rate = interest_rate / 100
 #periodic_interest_rate = (1+interest_rate)**(1/12) - 1
 periodic_interest_rate = (interest_rate / 12)
@@ -66,9 +67,8 @@ interest_pay_arr = np.zeros(payment_months)
 principal_pay_arr = np.zeros(payment_months)
 monthly_pay = np.zeros(payment_months)
 
+#payments in rentevastperiode
 for i in range(0, payment_months):
-    print(interest_rate)
-    print(periodic_interest_rate)
 
     if i == 0:
         previous_principal_remaining = loan_amount
@@ -85,7 +85,26 @@ for i in range(0, payment_months):
     principal_pay_arr[i] = principal_payment
     principal_remaining[i] = previous_principal_remaining - principal_payment
     monthly_pay[i] = monthly_installment
+
+#payments after rentevastperiode
+for i in range(0, payment_months):
+
+    if i == 0:
+        previous_principal_remaining = loan_amount
+    else:
+        previous_principal_remaining = principal_remaining[i-1]
+        
+    interest_payment = round(previous_principal_remaining*periodic_interest_rate, 2)
+    principal_payment = round(monthly_installment - interest_payment, 2)
     
+    if previous_principal_remaining - principal_payment < 0:
+        principal_payment = previous_principal_remaining
+    
+    interest_pay_arr[i] = interest_payment 
+    principal_pay_arr[i] = principal_payment
+    principal_remaining[i] = previous_principal_remaining - principal_payment
+    monthly_pay[i] = monthly_installment
+
 #print(type(monthly_pay))
 
 month_num = np.arange(payment_months)
