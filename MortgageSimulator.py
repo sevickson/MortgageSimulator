@@ -47,9 +47,11 @@ payment_months_after = int(interest_rate_period*12)
 
 interest_rate = interest_rate / 100
 periodic_interest_rate = round((interest_rate / 12),6)
+print(periodic_interest_rate)
 
 interest_rate_after = interest_rate_after / 100
 periodic_interest_rate_after = round((interest_rate_after / 12),6)
+print(periodic_interest_rate_after)
 
 monthly_installment = -1*npf.pmt(periodic_interest_rate , payment_months, loan_amount)
 
