@@ -44,7 +44,9 @@ with col2:
 loan_amount = total_mortgage #- down_payment
 payment_months = int(payment_years*12)
 interest_rate = interest_rate / 100
+print(interest_rate)
 periodic_interest_rate = (1+interest_rate)**(1/12) - 1
+print(periodic_interest_rate)
 monthly_installment = -1*npf.pmt(periodic_interest_rate , payment_months, loan_amount)
 
 #principal_remaining = np.zeros(payment_months)
