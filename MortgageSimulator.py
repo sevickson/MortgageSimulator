@@ -98,10 +98,10 @@ monthly_installment_after = -1*npf.pmt(periodic_interest_rate_after , payment_mo
 
 #payments after rentevastperiode
 for i in range(payment_months_after, payment_months):
-print(periodic_interest_rate_after)
-print(payment_months_left)
-print(previous_principal_remaining)
-print(principal_remaining_after)
+    print(periodic_interest_rate_after)
+    print(payment_months_left)
+    print(previous_principal_remaining)
+    print(principal_remaining_after)
 #
 #    if i == 0:
 #        previous_principal_remaining = loan_amount
