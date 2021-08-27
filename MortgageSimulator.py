@@ -76,7 +76,7 @@ for i in range(0, payment_months):
     interest_pay_arr[i] = interest_payment 
     principal_pay_arr[i] = principal_payment
     principal_remaining[i] = previous_principal_remaining - principal_payment
-    monthly_pay[i] = round(interest_payment + principal_payment, 2)
+    monthly_pay[i] = interest_payment + principal_payment
     
 print(type(monthly_pay))
 
@@ -84,6 +84,7 @@ month_num = np.arange(payment_months)
 month_num = month_num + 1
 
 principal_remaining = np.around(principal_remaining, decimals=2)
+monthly_pay = np.around(monthly_pay, decimals=2)
 
 fig = make_subplots(
     rows=2, cols=1,
