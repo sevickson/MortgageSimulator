@@ -44,9 +44,13 @@ with col2:
 loan_amount = total_mortgage #- down_payment
 payment_months = int(payment_years*12)
 payment_months_after = int(interest_rate_period*12)
+
 interest_rate = interest_rate / 100
-#periodic_interest_rate = (1+interest_rate)**(1/12) - 1
 periodic_interest_rate = (interest_rate / 12)
+
+interest_rate_after = interest_rate_after / 100
+periodic_interest_rate_after = (interest_rate_after / 12)
+
 monthly_installment = -1*npf.pmt(periodic_interest_rate , payment_months, loan_amount)
 
 #principal_remaining = np.zeros(payment_months)
@@ -88,20 +92,20 @@ for i in range(0, payment_months_after): #payment_months):
 
 monthly_installment_after = -1*npf.pmt(periodic_interest_rate , payment_months, previous_principal_remaining)
 #payments after rentevastperiode
-for i in range(payment_months_after+1, payment_months):
+for i in range(payment_months_after, payment_months):
 #
 #    if i == 0:
 #        previous_principal_remaining = loan_amount
 #    else:
     previous_principal_remaining = principal_remaining[i-1]
         
-    interest_payment = round(previous_principal_remaining*periodic_interest_rate, 2)
-    principal_payment = round(monthly_installment_after - interest_payment, 2)
+    interest_payment_after = round(previous_principal_remaining*periodic_interest_rate_after, 2)
+    principal_payment = round(monthly_installment_after - interest_payment_after, 2)
     
     if previous_principal_remaining - principal_payment < 0:
         principal_payment = previous_principal_remaining
     
-    interest_pay_arr[i] = interest_payment 
+    interest_pay_arr[i] = interest_payment_after 
     principal_pay_arr[i] = principal_payment
     principal_remaining[i] = previous_principal_remaining - principal_payment
     monthly_pay[i] = monthly_installment_after
