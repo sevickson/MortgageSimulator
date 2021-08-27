@@ -49,11 +49,12 @@ monthly_installment = -1*npf.pmt(periodic_interest_rate , payment_months, loan_a
 
 #st.subheader("**Down Payment:** €" + str(round(down_payment,2)))
 st.subheader("**Hypotheekbedrag:** €" + str(round(loan_amount, 2)))
-st.subheader("**Maandelijks bedrag:** €" + str(round(monthly_installment, 2)))
+st.subheader("**Bruto maandelijks bedrag:** €" + str(round(monthly_installment, 2)))
+st.subheader("**Bruto totaal bedrag gedurene looptijd:** €" + str(round(monthly_installment, 2)))
 
 st.markdown("---")
 
-st.header("**Mortgage loan Amortization**")
+st.header("**Annuïteitenhypotheek afschrijvingen**")
 principal_remaining = np.zeros(payment_months)
 interest_pay_arr = np.zeros(payment_months)
 principal_pay_arr = np.zeros(payment_months)
@@ -75,8 +76,9 @@ for i in range(0, payment_months):
     interest_pay_arr[i] = interest_payment 
     principal_pay_arr[i] = principal_payment
     principal_remaining[i] = previous_principal_remaining - principal_payment
-    monthly_pay[i] = interest_payment + principal_payment
+    monthly_pay[i] = round(interest_payment + principal_payment, 2)
     
+print(type(monthly_pay))
 
 month_num = np.arange(payment_months)
 month_num = month_num + 1
@@ -121,7 +123,7 @@ fig.append_trace(
         row=2, col=1
     )
 
-fig.update_layout(title='Mortgage Installment Payment Over Months',
+fig.update_layout(title='Annuïteitenhypotheek afschrijvingen per maand',
                    xaxis_title='Month',
                    yaxis_title='Amount(€)',
                    height= 800,
