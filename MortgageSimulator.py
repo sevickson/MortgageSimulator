@@ -86,24 +86,25 @@ for i in range(0, payment_months_after): #payment_months):
     principal_remaining[i] = previous_principal_remaining - principal_payment
     monthly_pay[i] = monthly_installment
 
+monthly_installment_after = -1*npf.pmt(periodic_interest_rate , payment_months, previous_principal_remaining)
 #payments after rentevastperiode
-#for i in range(0, payment_months):
+for i in range(payment_months_after+1, payment_months):
 #
 #    if i == 0:
 #        previous_principal_remaining = loan_amount
 #    else:
-#        previous_principal_remaining = principal_remaining[i-1]
-#        
-#    interest_payment = round(previous_principal_remaining*periodic_interest_rate, 2)
-#    principal_payment = round(monthly_installment - interest_payment, 2)
-#    
-#    if previous_principal_remaining - principal_payment < 0:
-#        principal_payment = previous_principal_remaining
-#    
-#    interest_pay_arr[i] = interest_payment 
-#    principal_pay_arr[i] = principal_payment
-#    principal_remaining[i] = previous_principal_remaining - principal_payment
-#    monthly_pay[i] = monthly_installment
+    previous_principal_remaining = principal_remaining[i-1]
+        
+    interest_payment = round(previous_principal_remaining*periodic_interest_rate, 2)
+    principal_payment = round(monthly_installment_after - interest_payment, 2)
+    
+    if previous_principal_remaining - principal_payment < 0:
+        principal_payment = previous_principal_remaining
+    
+    interest_pay_arr[i] = interest_payment 
+    principal_pay_arr[i] = principal_payment
+    principal_remaining[i] = previous_principal_remaining - principal_payment
+    monthly_pay[i] = monthly_installment_after
 
 #print(type(monthly_pay))
 
