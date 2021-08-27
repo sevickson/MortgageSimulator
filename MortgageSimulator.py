@@ -30,11 +30,11 @@ with col1:
     interest_rate_period = st.number_input("Vul in je rentevast periode(%): ", min_value=0.0, format='%f')
 
 with col2:
-    st.subheader("Waarde woning")
-    home_value = st.number_input("Waarde van de woning(€): ", min_value=0.0, format='%f')
+    #st.subheader("Waarde woning")
+    #home_value = st.number_input("Waarde van de woning(€): ", min_value=0.0, format='%f')
     
     st.subheader("Looptijd hypotheek (jaren)")
-    payment_years = st.number_input("Vul in totale looptijd van hypotheek (jaren): ", min_value=3, format='%d')
+    payment_years = st.number_input("Vul in totale looptijd van hypotheek (jaren): ", min_value=30, format='%d')
 
     st.subheader("Stijging na rentevastperiode")
     interest_rate_after = st.number_input("Vul in mogelijke stijging na rentevastperiode(%): ", min_value=0.0, format='%f')
@@ -48,8 +48,8 @@ periodic_interest_rate = (1+interest_rate)**(1/12) - 1
 monthly_installment = -1*npf.pmt(periodic_interest_rate , payment_months, loan_amount)
 
 #st.subheader("**Down Payment:** €" + str(round(down_payment,2)))
-st.subheader("**Loan Amount:** €" + str(round(loan_amount, 2)))
-st.subheader("**Monthly Installment:** €" + str(round(monthly_installment, 2)))
+st.subheader("**Hypotheekbedrag:** €" + str(round(loan_amount, 2)))
+st.subheader("**Maandelijks bedrag:** €" + str(round(monthly_installment, 2)))
 
 st.markdown("---")
 
@@ -57,6 +57,7 @@ st.header("**Mortgage loan Amortization**")
 principal_remaining = np.zeros(payment_months)
 interest_pay_arr = np.zeros(payment_months)
 principal_pay_arr = np.zeros(payment_months)
+monthly_pay = np.zeros(payment_months)
 
 for i in range(0, payment_months):
     
@@ -74,6 +75,7 @@ for i in range(0, payment_months):
     interest_pay_arr[i] = interest_payment 
     principal_pay_arr[i] = principal_payment
     principal_remaining[i] = previous_principal_remaining - principal_payment
+    monthly_pay[i] = interest_payment + principal_payment
     
 
 month_num = np.arange(payment_months)
@@ -92,10 +94,10 @@ fig = make_subplots(
 fig.add_trace(
         go.Table(
             header=dict(
-                    values=['Month', 'Principal Payment(€)', 'Interest Payment(€)', 'Remaining Principal(€)']
+                    values=['Maand', 'Maandbedrag','Aflossing(€)', 'Rente(€)', 'Restschuld(€)']
                 ),
             cells = dict(
-                    values =[month_num, principal_pay_arr, interest_pay_arr, principal_remaining]
+                    values =[month_num, monthly_pay, principal_pay_arr, interest_pay_arr, principal_remaining]
                 )
             ),
         row=1, col=1
