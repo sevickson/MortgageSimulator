@@ -63,7 +63,7 @@ st.header("**Annuïteitenhypotheek afschrijvingen**")
 principal_remaining = np.zeros(payment_months)
 interest_pay_arr = np.zeros(payment_months)
 principal_pay_arr = np.zeros(payment_months)
-#monthly_pay = np.zeros(payment_months)
+monthly_pay = np.zeros(payment_months)
 
 for i in range(0, payment_months):
     
