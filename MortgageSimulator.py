@@ -93,15 +93,15 @@ for i in range(0, payment_months_after): #payment_months):
 principal_remaining_after = previous_principal_remaining - principal_payment
 payment_months_left = payment_months-payment_months_after
 #calculate after rentevastperiode
-monthly_installment_after = -1*npf.pmt(periodic_interest_rate_after, payment_months_left, loan_amount)
+monthly_installment_after = -1*npf.pmt(periodic_interest_rate_after, payment_months_left, previous_principal_remaining)
 
 
 #payments after rentevastperiode
 for i in range(payment_months_after, payment_months):
-    print(periodic_interest_rate_after)
-    print(payment_months_left)
-    print(previous_principal_remaining)
-    print(principal_remaining_after)
+    print('periodic_interest_rate_after',periodic_interest_rate_after)
+    print('payment_months_left',payment_months_left)
+    print('previous_principal_remaining',previous_principal_remaining)
+    print('principal_remaining_after',principal_remaining_after)
 #
 #    if i == 0:
 #        previous_principal_remaining = loan_amount
