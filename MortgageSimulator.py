@@ -50,7 +50,7 @@ monthly_installment = -1*npf.pmt(periodic_interest_rate , payment_months, loan_a
 #st.subheader("**Down Payment:** €" + str(round(down_payment,2)))
 st.subheader("**Hypotheekbedrag:** €" + str(round(loan_amount, 2)))
 st.subheader("**Bruto maandelijks bedrag:** €" + str(round(monthly_installment, 2)))
-st.subheader("**Bruto totaal bedrag gedurene looptijd:** €" + str(round(monthly_installment, 2)))
+st.subheader("**Bruto totaal bedrag gedurene looptijd:** €" + str(round(np.sum(monthly_pay), 2)))
 
 st.markdown("---")
 
