@@ -47,6 +47,11 @@ interest_rate = interest_rate / 100
 periodic_interest_rate = (1+interest_rate)**(1/12) - 1
 monthly_installment = -1*npf.pmt(periodic_interest_rate , payment_months, loan_amount)
 
+principal_remaining = np.zeros(payment_months)
+interest_pay_arr = np.zeros(payment_months)
+principal_pay_arr = np.zeros(payment_months)
+monthly_pay = np.zeros(payment_months)
+
 #st.subheader("**Down Payment:** €" + str(round(down_payment,2)))
 st.subheader("**Hypotheekbedrag:** €" + str(round(loan_amount, 2)))
 st.subheader("**Bruto maandelijks bedrag:** €" + str(round(monthly_installment, 2)))
@@ -55,10 +60,10 @@ st.subheader("**Bruto totaal bedrag gedurene looptijd:** €" + str(round(np.sum
 st.markdown("---")
 
 st.header("**Annuïteitenhypotheek afschrijvingen**")
-principal_remaining = np.zeros(payment_months)
-interest_pay_arr = np.zeros(payment_months)
-principal_pay_arr = np.zeros(payment_months)
-monthly_pay = np.zeros(payment_months)
+#principal_remaining = np.zeros(payment_months)
+#interest_pay_arr = np.zeros(payment_months)
+#principal_pay_arr = np.zeros(payment_months)
+#monthly_pay = np.zeros(payment_months)
 
 for i in range(0, payment_months):
     
