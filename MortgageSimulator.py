@@ -94,8 +94,8 @@ if periodic_interest_rate_after is not None:
 
     #payments after rentevastperiode
     for i in range(payment_months_after, payment_months):
-        print('periodic_interest_rate',periodic_interest_rate)
-        print('periodic_interest_rate_after',periodic_interest_rate_after)
+        #print('periodic_interest_rate',periodic_interest_rate)
+        #print('periodic_interest_rate_after',periodic_interest_rate_after)
         #print('periodic_interest_rate_after',periodic_interest_rate_after)
         #print('payment_months_left',payment_months_left)
         #print('previous_principal_remaining',previous_principal_remaining)
@@ -143,6 +143,8 @@ month_num = month_num + 1
 principal_remaining = np.around(principal_remaining, decimals=2)
 monthly_pay = np.around(monthly_pay, decimals=2)
 
+st.subheader("**Bruto totaal bedrag gedurende looptijd:** €" + str(round(np.sum(monthly_pay), 2)))
+
 fig = make_subplots(
     rows=2, cols=1,
     vertical_spacing=0.03,
@@ -167,7 +169,7 @@ fig.add_trace(
         go.Scatter(
                 x=month_num,
                 y=principal_pay_arr,
-                name= "Principal Payment"
+                name= "Aflossing betaling(€)"
             ),
         row=2, col=1
     )
@@ -176,7 +178,7 @@ fig.append_trace(
         go.Scatter(
             x=month_num, 
             y=interest_pay_arr,
-            name="Interest Payment"
+            name="Rente betaling(€)"
         ),
         row=2, col=1
     )
