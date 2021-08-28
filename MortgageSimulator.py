@@ -91,6 +91,7 @@ if periodic_interest_rate_after is not None:
     payment_months_left = payment_months-payment_months_after
     #calculate after rentevastperiode
     #print(previous_principal_remaining)
+    previous_principal_remaining = principal_remaining[i-1]
     monthly_installment_after = -1*npf.pmt(periodic_interest_rate_after, payment_months_left, previous_principal_remaining)
     #payments after rentevastperiode
     for i in range(payment_months_after, payment_months):
@@ -104,9 +105,9 @@ if periodic_interest_rate_after is not None:
     #    if i == 0:
     #        previous_principal_remaining = loan_amount
     #    else:
-        print('previous_principal_remaining',previous_principal_remaining)
-        previous_principal_remaining = principal_remaining[i-1]
-        print('principal_remaining[i-1]',previous_principal_remaining)    
+        #print('previous_principal_remaining',previous_principal_remaining)
+        #previous_principal_remaining = principal_remaining[i-1]
+        #print('principal_remaining[i-1]',previous_principal_remaining)    
         interest_payment_after = round(previous_principal_remaining*periodic_interest_rate_after, 2)
         principal_payment = round(monthly_installment_after - interest_payment_after, 2)
         
