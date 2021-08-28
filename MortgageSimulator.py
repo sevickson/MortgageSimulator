@@ -87,27 +87,16 @@ for i in range(0, payment_months_after): #payment_months):
     monthly_pay[i] = monthly_installment
 
 if periodic_interest_rate_after is not None:
-    #principal_remaining_after = previous_principal_remaining - principal_payment
+
     payment_months_left = payment_months-payment_months_after
     #calculate after rentevastperiode
-    #print(previous_principal_remaining)
-    previous_principal_remaining = principal_remaining[i-1]
+    previous_principal_remaining = principal_remaining[i]
     monthly_installment_after = -1*npf.pmt(periodic_interest_rate_after, payment_months_left, previous_principal_remaining)
+
     #payments after rentevastperiode
     for i in range(payment_months_after, payment_months):
-        #print('periodic_interest_rate',periodic_interest_rate)
-        #print('periodic_interest_rate_after',periodic_interest_rate_after)
-        #print('periodic_interest_rate_after',periodic_interest_rate_after)
-        #print('payment_months_left',payment_months_left)
-        #print('previous_principal_remaining',previous_principal_remaining)
-        #print('principal_remaining_after',principal_remaining_after)
-    #
-    #    if i == 0:
-    #        previous_principal_remaining = loan_amount
-    #    else:
-        #print('previous_principal_remaining',previous_principal_remaining)
         previous_principal_remaining = principal_remaining[i-1]
-        #print('principal_remaining[i-1]',previous_principal_remaining)    
+ 
         interest_payment_after = previous_principal_remaining*periodic_interest_rate_after #round(previous_principal_remaining*periodic_interest_rate_after, 2)
         principal_payment = monthly_installment_after - interest_payment_after #round(monthly_installment_after - interest_payment_after, 2)
         
@@ -118,9 +107,6 @@ if periodic_interest_rate_after is not None:
         principal_pay_arr[i] = principal_payment
         principal_remaining[i] = previous_principal_remaining - principal_payment
         monthly_pay[i] = monthly_installment_after
-
-        #debug
-        print(interest_pay_arr[i],principal_pay_arr[i],principal_remaining[i],monthly_pay[i])
 
 else:
     for i in range(payment_months_after, payment_months):
