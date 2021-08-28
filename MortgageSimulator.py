@@ -2,7 +2,8 @@
 """
 Created on Mon Apr 12 17:12:17 2021
 
-@author: Teo Bee Guan
+@author: Sevickson Kwidama
+@based on work from: Teo Bee Guan
 """
 
 import streamlit as st
@@ -46,7 +47,7 @@ payment_months = int(payment_years*12)
 payment_months_after = int(interest_rate_period*12)
 
 interest_rate = interest_rate / 100
-periodic_interest_rate = round((interest_rate / 12),6)
+periodic_interest_rate = interest_rate / 12 #round((interest_rate / 12),6)
 
 interest_rate_after = interest_rate_after / 100
 periodic_interest_rate_after = round((interest_rate_after / 12),6)
