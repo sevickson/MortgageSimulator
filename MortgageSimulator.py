@@ -55,9 +55,9 @@ periodic_interest_rate_after = interest_rate_after / 12
 
 monthly_installment = -1*npf.pmt(periodic_interest_rate , payment_months, loan_amount)
 
-st.subheader("**Hypotheekbedrag:** €" + str(round(loan_amount, 2)))
-st.subheader("**Bruto maandelijks bedrag:** €" + str(round(monthly_installment, 2)))
-st.subheader("**Bruto totaal bedrag gedurene looptijd:** €" + str(round(monthly_installment*payment_months, 2)))
+#st.subheader("**Hypotheekbedrag:** €" + str(round(loan_amount, 2)))
+#st.subheader("**Bruto maandelijks bedrag:** €" + str(round(monthly_installment, 2)))
+#st.subheader("**Bruto totaal bedrag gedurene looptijd:** €" + str(round(monthly_installment*payment_months, 2)))
 
 st.markdown("---")
 
@@ -68,25 +68,44 @@ principal_pay_arr = np.zeros(payment_months)
 monthly_pay = np.zeros(payment_months)
 
 #payments in rentevastperiode
-for i in range(0, payment_months_after): #payment_months):
+if periodic_interest_rate_after is None:
+    for i in range(0, payment_months): #payment_months):
 
-    if i == 0:
-        previous_principal_remaining = loan_amount
-    else:
-        previous_principal_remaining = principal_remaining[i-1]
+        if i == 0:
+            previous_principal_remaining = loan_amount
+        else:
+            previous_principal_remaining = principal_remaining[i-1]
+            
+        interest_payment = round(previous_principal_remaining*periodic_interest_rate, 2)
+        principal_payment = round(monthly_installment - interest_payment, 2)
         
-    interest_payment = round(previous_principal_remaining*periodic_interest_rate, 2)
-    principal_payment = round(monthly_installment - interest_payment, 2)
-    
-    if previous_principal_remaining - principal_payment < 0:
-        principal_payment = previous_principal_remaining
-    
-    interest_pay_arr[i] = interest_payment 
-    principal_pay_arr[i] = principal_payment
-    principal_remaining[i] = previous_principal_remaining - principal_payment
-    monthly_pay[i] = monthly_installment
+        if previous_principal_remaining - principal_payment < 0:
+            principal_payment = previous_principal_remaining
+        
+        interest_pay_arr[i] = interest_payment 
+        principal_pay_arr[i] = principal_payment
+        principal_remaining[i] = previous_principal_remaining - principal_payment
+        monthly_pay[i] = monthly_installment
 
-if periodic_interest_rate_after is not None:
+#if periodic_interest_rate_after is not None:
+else:
+    for i in range(0, payment_months_after): #payment_months):
+
+        if i == 0:
+            previous_principal_remaining = loan_amount
+        else:
+            previous_principal_remaining = principal_remaining[i-1]
+            
+        interest_payment = round(previous_principal_remaining*periodic_interest_rate, 2)
+        principal_payment = round(monthly_installment - interest_payment, 2)
+        
+        if previous_principal_remaining - principal_payment < 0:
+            principal_payment = previous_principal_remaining
+        
+        interest_pay_arr[i] = interest_payment 
+        principal_pay_arr[i] = principal_payment
+        principal_remaining[i] = previous_principal_remaining - principal_payment
+        monthly_pay[i] = monthly_installment
 
     payment_months_left = payment_months-payment_months_after
     #calculate after rentevastperiode
@@ -108,24 +127,24 @@ if periodic_interest_rate_after is not None:
         principal_remaining[i] = previous_principal_remaining - principal_payment
         monthly_pay[i] = monthly_installment_after
 
-else:
-    for i in range(payment_months_after, payment_months):
-
-        if i == 0:
-            previous_principal_remaining = loan_amount
-        else:
-            previous_principal_remaining = principal_remaining[i-1]
-            
-        interest_payment = round(previous_principal_remaining*periodic_interest_rate, 2)
-        principal_payment = round(monthly_installment - interest_payment, 2)
-        
-        if previous_principal_remaining - principal_payment < 0:
-            principal_payment = previous_principal_remaining
-        
-        interest_pay_arr[i] = interest_payment 
-        principal_pay_arr[i] = principal_payment
-        principal_remaining[i] = previous_principal_remaining - principal_payment
-        monthly_pay[i] = monthly_installment
+#else:
+#    for i in range(payment_months_after, payment_months):
+#
+#        if i == 0:
+#            previous_principal_remaining = loan_amount
+#        else:
+#            previous_principal_remaining = principal_remaining[i-1]
+#            
+#        interest_payment = round(previous_principal_remaining*periodic_interest_rate, 2)
+#        principal_payment = round(monthly_installment - interest_payment, 2)
+#        
+#        if previous_principal_remaining - principal_payment < 0:
+#            principal_payment = previous_principal_remaining
+#        
+#        interest_pay_arr[i] = interest_payment 
+#        principal_pay_arr[i] = principal_payment
+#        principal_remaining[i] = previous_principal_remaining - principal_payment
+#        monthly_pay[i] = monthly_installment
 
 
 month_num = np.arange(payment_months)
@@ -134,6 +153,9 @@ month_num = month_num + 1
 principal_remaining = np.around(principal_remaining, decimals=2)
 monthly_pay = np.around(monthly_pay, decimals=2)
 
+st.subheader("**Hypotheekbedrag:** €" + str(round(loan_amount, 2)))
+st.subheader("**Bruto maandelijks bedrag:** €" + str(round(monthly_installment, 2)))
+#st.subheader("**Bruto totaal bedrag gedurene looptijd:** €" + str(round(monthly_installment*payment_months, 2)))
 st.subheader("**Bruto totaal bedrag gedurende looptijd:** €" + str(round(np.sum(monthly_pay), 2)))
 
 fig = make_subplots(
