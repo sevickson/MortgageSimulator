@@ -68,7 +68,7 @@ principal_pay_arr = np.zeros(payment_months)
 monthly_pay = np.zeros(payment_months)
 
 #payments in rentevastperiode
-if periodic_interest_rate_after is None:
+if periodic_interest_rate_after == 0.0:
     for i in range(0, payment_months): #payment_months):
 
         if i == 0:
