@@ -108,8 +108,8 @@ if periodic_interest_rate_after is not None:
         #print('previous_principal_remaining',previous_principal_remaining)
         previous_principal_remaining = principal_remaining[i-1]
         #print('principal_remaining[i-1]',previous_principal_remaining)    
-        interest_payment_after = round(previous_principal_remaining*periodic_interest_rate_after, 2)
-        principal_payment = round(monthly_installment_after - interest_payment_after, 2)
+        interest_payment_after = previous_principal_remaining*periodic_interest_rate_after #round(previous_principal_remaining*periodic_interest_rate_after, 2)
+        principal_payment = monthly_installment_after - interest_payment_after #round(monthly_installment_after - interest_payment_after, 2)
         
         if previous_principal_remaining - principal_payment < 0:
             principal_payment = previous_principal_remaining
