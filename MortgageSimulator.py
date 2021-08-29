@@ -11,6 +11,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import numpy as np
 import numpy_financial as npf
+import hypotheekrentetarieven
 
 st.set_page_config(
     page_title="Hypotheek Betaling Simulator")
@@ -145,6 +146,9 @@ else:
 #        principal_pay_arr[i] = principal_payment
 #        principal_remaining[i] = previous_principal_remaining - principal_payment
 #        monthly_pay[i] = monthly_installment
+
+#test hypotheekrente
+df_rentes = hypotheekrentetarieven.scrape_hypotheekrentetarieven()
 
 
 month_num = np.arange(payment_months)
