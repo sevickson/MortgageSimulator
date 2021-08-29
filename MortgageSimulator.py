@@ -118,7 +118,7 @@ else:
 
     #payments after rentevastperiode
     for i in range(payment_months_after, payment_months):
-        print(arr_length)
+        #print(arr_length)
         print(previous_principal_remaining)
         previous_principal_remaining = principal_remaining[i-1]
  
