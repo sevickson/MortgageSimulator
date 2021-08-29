@@ -149,7 +149,7 @@ else:
 
 #test hypotheekrente
 df_rentes = hypotheekrentetarieven.scrape_hypotheekrentetarieven()
-
+print(df_rentes)
 
 month_num = np.arange(payment_months)
 month_num = month_num + 1
