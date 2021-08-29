@@ -112,12 +112,14 @@ else:
     #calculate after rentevastperiode
     #print(len(principal_remaining))
     #print(principal_remaining[len(principal_remaining)-1])
-    last_pos = len(principal_remaining)
-    previous_principal_remaining = principal_remaining[last_pos-1]
+    arr_length = len(principal_remaining)
+    previous_principal_remaining = principal_remaining[arr_length-1]
     monthly_installment_after = -1*npf.pmt(periodic_interest_rate_after, payment_months_left, previous_principal_remaining)
 
     #payments after rentevastperiode
     for i in range(payment_months_after, payment_months):
+        print(arr_length)
+        print(previous_principal_remaining)
         previous_principal_remaining = principal_remaining[i-1]
  
         interest_payment_after = round(previous_principal_remaining*periodic_interest_rate_after, 2)
@@ -151,8 +153,8 @@ else:
 #        monthly_pay[i] = monthly_installment
 
 #test hypotheekrente
-df_rentes = hypotheekrentetarieven.scrape_hypotheekrentetarieven()
-print(df_rentes)
+#df_rentes = hypotheekrentetarieven.scrape_hypotheekrentetarieven()
+#print(df_rentes)
 
 month_num = np.arange(payment_months)
 month_num = month_num + 1
