@@ -147,10 +147,6 @@ else:
 #        principal_remaining[i] = previous_principal_remaining - principal_payment
 #        monthly_pay[i] = monthly_installment
 
-#test hypotheekrente
-#df_rentes = hypotheekrentetarieven.scrape_hypotheekrentetarieven()
-#print(df_rentes)
-
 month_num = np.arange(payment_months)
 month_num = month_num + 1
 
