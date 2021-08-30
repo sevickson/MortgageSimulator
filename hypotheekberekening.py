@@ -82,6 +82,8 @@ def calculate_hypotheek_best(interest_percentage, interest_multiplier, payment_m
             principal_remaining[i] = previous_principal_remaining - principal_payment
             monthly_pay[i] = monthly_installment_after
 
+    interest_percentage_after = interest_percentage+(looptijd*interest_multiplier)
+    interest_rate_after = interest_percentage_after / 100
     month_num = np.arange(payment_months)
     month_num = month_num + 1
 
