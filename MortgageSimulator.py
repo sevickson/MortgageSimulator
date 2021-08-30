@@ -87,7 +87,7 @@ for index,row in df_rentes_filter.iterrows():
     looptijd = index
     interest_percentage = row[0]
     rente_na, results = hypotheekberekening.calculate_hypotheek_best(interest_percentage, interest_multiplier, payment_months, loan_amount, looptijd)
-    lst.append({'looptijd': index, 'gemiddelde rente': round(row[0],2), 'gemiddelde rente na periode': round(rente_na, 'bruto totaal': results})
+    lst.append({'looptijd': index, 'gemiddelde rente': round(row[0],2), 'gemiddelde rente na periode': round(rente_na,2), 'bruto totaal': round(results,2)})
     #print(results)
 df_all = pd.DataFrame(lst)
 
