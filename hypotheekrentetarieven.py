@@ -1,11 +1,9 @@
 #based on source:https://github.com/Jeroenvanbennekom/Hypotheekscraper
-
 from bs4 import BeautifulSoup
 import requests
 import time 
 import pandas as pd
-import numpy as np
-#from requests.models import LocationParseError
+#import numpy as np
 
 #looptijden = ("1", "2", "3", "5", "6", "7", "10", "12", "15", "17", "20", "25", "30")
 looptijden = ("5", "7", "10", "15", "17", "20", "30")

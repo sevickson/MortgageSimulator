@@ -10,7 +10,8 @@ import streamlit as st
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import numpy as np
-import numpy_financial as npf
+import pandas as pd
+#import numpy_financial as npf
 import hypotheekrentetarieven
 import hypotheekberekening
 
@@ -82,7 +83,7 @@ for index,row in df_rentes_filter.iterrows():
     print('rente gemiddelde',row[0])
     looptijd = index
     interest_percentage = row[0]
-    results = calculate_hypotheek_best(interest_percentage, interest_multiplier, payment_months, loan_amount, looptijd)
+    results = hypotheekberekening.calculate_hypotheek_best(interest_percentage, interest_multiplier, payment_months, loan_amount, looptijd)
 
 st.subheader("**Hypotheekbedrag:** €" + str(round(loan_amount, 2)))
 st.subheader("**Bruto maandelijks bedrag:** €" + str(round(monthly_installment, 2)))

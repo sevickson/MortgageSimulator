@@ -1,7 +1,6 @@
 import numpy as np
 import numpy_financial as npf
-
-import pandas as pd
+#import pandas as pd
 
 def calculate_hypotheek_best(interest_percentage, interest_multiplier, payment_months, loan_amount, looptijd):
     payment_months_after = int(looptijd*12)
