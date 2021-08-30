@@ -15,17 +15,20 @@ import pandas as pd
 import hypotheekrentetarieven
 import hypotheekberekening
 
-#get all hypotheekrentes
-df_rentes = hypotheekrentetarieven.scrape_hypotheekrentetarieven()
-#only use providers that have all the interest data available
-df_rentes_filter = df_rentes[(df_rentes['100%'] != '–') & (df_rentes['nhg'] != '–')]
-#change types to use groupby
-df_rentes_filter[["nhg","60%","80%","90%","100%","looptijd"]] = df_rentes_filter[["nhg","60%","80%","90%","100%","looptijd"]].apply(pd.to_numeric)
-#drop 'nhg' and mean without 'nhg' as this is only 23% of all mortgages (source:https://www.hdn.nl/marktcijfers/)
-df_rentes_filter.drop('nhg', axis=1,inplace=True)
-df_rentes_filter = df_rentes_filter.assign(gemiddelde=df_rentes_filter.iloc[:, 1:4].mean(axis=1).round(2))
-#use mean based on 'looptijd' to use this for the calculations
-df_rentes_filter = df_rentes_filter.groupby('looptijd').agg({'gemiddelde': ['mean','min']}).round(2)
+@st.cache
+def df_rentes():
+    #get all hypotheekrentes
+    df_rentes = hypotheekrentetarieven.scrape_hypotheekrentetarieven()
+    #only use providers that have all the interest data available
+    df_rentes_filter = df_rentes[(df_rentes['100%'] != '–') & (df_rentes['nhg'] != '–')]
+    #change types to use groupby
+    df_rentes_filter[["nhg","60%","80%","90%","100%","looptijd"]] = df_rentes_filter[["nhg","60%","80%","90%","100%","looptijd"]].apply(pd.to_numeric)
+    #drop 'nhg' and mean without 'nhg' as this is only 23% of all mortgages (source:https://www.hdn.nl/marktcijfers/)
+    df_rentes_filter.drop('nhg', axis=1,inplace=True)
+    df_rentes_filter = df_rentes_filter.assign(gemiddelde=df_rentes_filter.iloc[:, 1:4].mean(axis=1).round(2))
+    #use mean based on 'looptijd' to use this for the calculations
+    df_rentes_filter = df_rentes_filter.groupby('looptijd').agg({'gemiddelde': ['mean','min']}).round(2)
+df_rentes()
 
 st.set_page_config(
     page_title="Hypotheek Betaling Simulator")
