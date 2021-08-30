@@ -70,14 +70,14 @@ for index,row in df_rentes_filter.iterrows():
     looptijd = index
     interest_percentage = row[0]
     rente_na, results = hypotheekberekening.calculate_hypotheek_best(interest_percentage, interest_multiplier, payment_months, loan_amount, looptijd)
-    lst.append({'Looptijd': index, 'Gemiddelde Rente Vaste periode': np.around(row[0], decimals=2), 'Gemiddelde Rente na Vaste periode': np.around(rente_na, decimals=2), 'Bruto Totaal Gedurende Looptijd': np.around(results, decimals=2)})
+    lst.append({'Looptijd': index, 'Gemiddelde Rente Vaste periode': row[0], 'Gemiddelde Rente na Vaste periode': rente_na, 'Bruto Totaal Gedurende Looptijd': results})
 df_all = pd.DataFrame(lst)
 
 st.subheader("**Hypotheekbedrag:** €" + str(round(loan_amount, 2)))
 #st.subheader("**Bruto maandelijks bedrag:** €" + str(round(monthly_installment, 2)))
 #st.subheader("**Bruto totaal bedrag gedurende looptijd:** €" + str(round(np.sum(monthly_pay), 2)))
 
-st.write(df_all)
+st.write(df_all.round(2))
 
 #fig = make_subplots(
 #    rows=2, cols=1,
