@@ -80,20 +80,22 @@ st.header("**Annuïteitenhypotheek afschrijvingen**")
 #looptijd = 5
 #interest_percentage = 2
 #interest_multiplier = 0.2
-
+lst = []
 for index,row in df_rentes_filter.iterrows():
     print('looptijd',index)
     print('rente gemiddelde',row[0])
     looptijd = index
     interest_percentage = row[0]
-    results = hypotheekberekening.calculate_hypotheek_best(interest_percentage, interest_multiplier, payment_months, loan_amount, looptijd)
-    print(results)
+    rente_na, results = hypotheekberekening.calculate_hypotheek_best(interest_percentage, interest_multiplier, payment_months, loan_amount, looptijd)
+    lst.append({'looptijd': index, 'gemiddelde rente': row[0], 'gemiddelde rente na periode': rente_na, 'bruto totaal': results})
+    #print(results)
+df_all = pd.DataFrame(lst)
 
 st.subheader("**Hypotheekbedrag:** €" + str(round(loan_amount, 2)))
 #st.subheader("**Bruto maandelijks bedrag:** €" + str(round(monthly_installment, 2)))
 #st.subheader("**Bruto totaal bedrag gedurende looptijd:** €" + str(round(np.sum(monthly_pay), 2)))
 
-st.write(results)
+st.write(df_all)
 
 fig = make_subplots(
     rows=2, cols=1,
@@ -103,48 +105,48 @@ fig = make_subplots(
           ]
 )
 
-fig.add_trace(
-        go.Table(
-            header=dict(
-                    values=['Maand', 'Maandbedrag','Aflossing(€)', 'Rente(€)', 'Restschuld(€)']
-                ),
-            cells = dict(
-                    values =[month_num, monthly_pay, principal_pay_arr, interest_pay_arr, principal_remaining]
-                )
-            ),
-        row=1, col=1
-    )
+#fig.add_trace(
+#        go.Table(
+#            header=dict(
+#                    values=['Maand', 'Maandbedrag','Aflossing(€)', 'Rente(€)', 'Restschuld(€)']
+#                ),
+#            cells = dict(
+#                    values =[month_num, monthly_pay, principal_pay_arr, interest_pay_arr, principal_remaining]
+#                )
+#            ),
+#        row=1, col=1
+#    )
 
-fig.add_trace(
-        go.Scatter(
-                x=month_num,
-                y=principal_pay_arr,
-                name= "Aflossing betaling(€)"
-            ),
-        row=2, col=1
-    )
-
-fig.append_trace(
-        go.Scatter(
-            x=month_num, 
-            y=interest_pay_arr,
-            name="Rente betaling(€)"
-        ),
-        row=2, col=1
-    )
-
-fig.update_layout(title='Annuïteitenhypotheek afschrijvingen per maand',
-                   xaxis_title='Month',
-                   yaxis_title='Amount(€)',
-                   height= 800,
-                   width = 1200,
-                   legend= dict(
-                           orientation="h",
-                           yanchor='top',
-                           y=0.47,
-                           xanchor= 'left',
-                           x= 0.01
-                       )
-                  )
-
+#fig.add_trace(
+#        go.Scatter(
+#                x=month_num,
+#                y=principal_pay_arr,
+#                name= "Aflossing betaling(€)"
+#            ),
+#        row=2, col=1
+#    )
+#
+#fig.append_trace(
+#        go.Scatter(
+#            x=month_num, 
+#            y=interest_pay_arr,
+#            name="Rente betaling(€)"
+#        ),
+#        row=2, col=1
+#    )
+#
+#fig.update_layout(title='Annuïteitenhypotheek afschrijvingen per maand',
+#                   xaxis_title='Month',
+#                   yaxis_title='Amount(€)',
+#                   height= 800,
+#                   width = 1200,
+#                   legend= dict(
+#                           orientation="h",
+#                           yanchor='top',
+#                           y=0.47,
+#                           xanchor= 'left',
+#                           x= 0.01
+#                       )
+#                  )
+#
 st.plotly_chart(fig, use_container_width=True)
