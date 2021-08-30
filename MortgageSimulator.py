@@ -47,7 +47,7 @@ with col1:
 
 with col2:    
     st.subheader("Rente vermenigvuldiger")
-    interest_multiplier = st.number_input("Vul in verwachte rente groei per jaar: ", min_value=0.0, format='%d')
+    interest_multiplier = st.number_input("Vul in verwachte rente groei per jaar: ", min_value=0.0, format='%f')
 
     st.subheader("Looptijd hypotheek (jaren)")
     payment_years = st.number_input("Vul in totale looptijd van hypotheek (jaren): ", min_value=30, format='%d')
@@ -86,7 +86,7 @@ for index,row in df_rentes_filter.iterrows():
     results = hypotheekberekening.calculate_hypotheek_best(interest_percentage, interest_multiplier, payment_months, loan_amount, looptijd)
 
 st.subheader("**Hypotheekbedrag:** €" + str(round(loan_amount, 2)))
-st.subheader("**Bruto maandelijks bedrag:** €" + str(round(monthly_installment, 2)))
+#st.subheader("**Bruto maandelijks bedrag:** €" + str(round(monthly_installment, 2)))
 st.subheader("**Bruto totaal bedrag gedurende looptijd:** €" + str(round(np.sum(monthly_pay), 2)))
 
 st.write(results)
