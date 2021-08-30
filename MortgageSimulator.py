@@ -18,7 +18,7 @@ import hypotheekberekening
 st.set_page_config(
     page_title="Hypotheek Betaling Simulator")
 
-st.title("Hypotheek Betaling Simulator")
+#st.title("Hypotheek Betaling Simulator")
 
 st.header("**Hypotheekgegevens**")
 col1, col2 = st.columns(2)
@@ -56,7 +56,8 @@ def df_rentes():
     df_rentes_filter = df_rentes_filter.assign(gemiddelde=df_rentes_filter.iloc[:, 1:4].mean(axis=1).round(2))
     #use mean based on 'looptijd' to use this for the calculations
     df_rentes_filter = df_rentes_filter.groupby('looptijd').agg({'gemiddelde': ['mean','min']}).round(2)
-df_rentes()    
+    return(df_rentes_filter)
+df_rentes_filter = df_rentes()    
 
 loan_amount = total_mortgage #- down_payment
 payment_months = int(payment_years*12)
