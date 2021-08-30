@@ -83,4 +83,4 @@ def calculate_hypotheek_best(interest_percentage, interest_multiplier, payment_m
 
     principal_remaining = np.around(principal_remaining, decimals=2)
     monthly_pay = np.around(monthly_pay, decimals=2)
-    return(interest_rate_after,round(np.sum(monthly_pay), 2))
+    return(interest_percentage_after,round(np.sum(monthly_pay), 2))

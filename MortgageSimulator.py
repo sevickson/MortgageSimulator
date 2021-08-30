@@ -82,12 +82,12 @@ st.header("**Annuïteitenhypotheek afschrijvingen**")
 #interest_multiplier = 0.2
 lst = []
 for index,row in df_rentes_filter.iterrows():
-    print('looptijd',index)
-    print('rente gemiddelde',row[0])
+    #print('looptijd',index)
+    #print('rente gemiddelde',row[0])
     looptijd = index
     interest_percentage = row[0]
     rente_na, results = hypotheekberekening.calculate_hypotheek_best(interest_percentage, interest_multiplier, payment_months, loan_amount, looptijd)
-    lst.append({'looptijd': index, 'gemiddelde rente': row[0], 'gemiddelde rente na periode': rente_na, 'bruto totaal': results})
+    lst.append({'looptijd': index, 'gemiddelde rente': round(row[0],2), 'gemiddelde rente na periode': round(rente_na, 'bruto totaal': results})
     #print(results)
 df_all = pd.DataFrame(lst)
 
@@ -97,13 +97,13 @@ st.subheader("**Hypotheekbedrag:** €" + str(round(loan_amount, 2)))
 
 st.write(df_all)
 
-fig = make_subplots(
-    rows=2, cols=1,
-    vertical_spacing=0.03,
-    specs=[[{"type": "table"}],
-           [{"type": "scatter"}]
-          ]
-)
+#fig = make_subplots(
+#    rows=2, cols=1,
+#    vertical_spacing=0.03,
+#    specs=[[{"type": "table"}],
+#           [{"type": "scatter"}]
+#          ]
+#)
 
 #fig.add_trace(
 #        go.Table(
@@ -149,4 +149,4 @@ fig = make_subplots(
 #                       )
 #                  )
 #
-st.plotly_chart(fig, use_container_width=True)
+#st.plotly_chart(fig, use_container_width=True)
