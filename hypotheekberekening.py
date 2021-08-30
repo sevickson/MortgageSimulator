@@ -6,7 +6,7 @@ def calculate_hypotheek_best(interest_percentage, interest_multiplier, payment_m
     payment_months_after = int(looptijd*12)
     interest_rate = interest_percentage / 100
     periodic_interest_rate = interest_rate / 12
-    interest_percentage_after = '' #interest_percentage+(looptijd*interest_multiplier)
+    interest_percentage_after = 0 #interest_percentage+(looptijd*interest_multiplier)
     #interest_rate_after = interest_percentage_after / 100
     #print('rente na rentevast',interest_percentage+(looptijd*interest_multiplier))
     #periodic_interest_rate_after = interest_rate_after / 12
@@ -18,7 +18,7 @@ def calculate_hypotheek_best(interest_percentage, interest_multiplier, payment_m
 
     monthly_installment = -1*npf.pmt(periodic_interest_rate , payment_months, loan_amount)
     #payments in rentevastperiode
-    if (interest_percentage_after == '') or (payment_months == payment_months_after):
+    if (interest_percentage_after == 0) or (payment_months == payment_months_after):
         for i in range(0, payment_months):
 
             if i == 0:
