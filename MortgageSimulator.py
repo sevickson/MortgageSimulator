@@ -78,7 +78,8 @@ st.subheader("**Hypotheekbedrag:** €" + str(round(loan_amount, 2)))
 #st.subheader("**Bruto totaal bedrag gedurende looptijd:** €" + str(round(np.sum(monthly_pay), 2)))
 
 st.write(df_all.round(2))
-st.write(df_all.info)
+st.write(df_all.info())
+print(df_all.info())
 
 #fig = make_subplots(
 #    rows=2, cols=1,
