@@ -34,6 +34,8 @@ def scrape_script_fixed_period(looptijd):
 		for row in rows:
 			cols=row.find_all('td')
 			cols=[x.text.strip() for x in cols]
+			cols=[float(x[:-1]) if x.endswith('%') else x for x in cols ]
+			#print(cols)
 			#Add only rows with a column for all tariffs and name of the 'verstrekker'. This is to filter empty rows and adverts. 
 			if len(cols)==8:
 				data_lst.append(cols[1:7])

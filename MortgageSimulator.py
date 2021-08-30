@@ -12,6 +12,19 @@ from plotly.subplots import make_subplots
 import numpy as np
 import numpy_financial as npf
 import hypotheekrentetarieven
+import hypotheekberekening
+
+#get all hypotheekrentes
+df_rentes = hypotheekrentetarieven.scrape_hypotheekrentetarieven()
+#only use providers that have all the interest data available
+df_rentes_filter = df_rentes[(df_rentes['100%'] != '–') & (df_rentes['nhg'] != '–')]
+#change types to use groupby
+df_rentes_filter[["nhg","60%","80%","90%","100%","looptijd"]] = df_rentes_filter[["nhg","60%","80%","90%","100%","looptijd"]].apply(pd.to_numeric)
+#drop 'nhg' and mean without 'nhg' as this is only 23% of all mortgages (source:https://www.hdn.nl/marktcijfers/)
+df_rentes_filter.drop('nhg', axis=1,inplace=True)
+df_rentes_filter = df_rentes_filter.assign(gemiddelde=df_rentes_filter.iloc[:, 1:4].mean(axis=1).round(2))
+#use mean based on 'looptijd' to use this for the calculations
+df_rentes_filter = df_rentes_filter.groupby('looptijd').agg({'gemiddelde': ['mean','min']}).round(2)
 
 st.set_page_config(
     page_title="Hypotheek Betaling Simulator")
@@ -25,138 +38,57 @@ with col1:
     st.subheader("Totaal Hypotheekbedrag")
     total_mortgage = st.number_input("Vul in totale hypotheekbedrag (€): ", min_value=0.0, format='%f')
     
-    st.subheader("Hypotheekrente per jaar")
-    interest_rate = st.number_input("Vul in je hypotheekrente in rentevast periode (%): ", min_value=0.0, format='%f')
+    #st.subheader("Hypotheekrente per jaar")
+    #interest_rate = st.number_input("Vul in je hypotheekrente in rentevast periode (%): ", min_value=0.0, format='%f')
 
-    st.subheader("Rentevastperiode")
-    interest_rate_period = st.number_input("Vul in je rentevast periode (jaren): ", min_value=0.0, format='%f')
+    #st.subheader("Rentevastperiode")
+    #interest_rate_period = st.number_input("Vul in je rentevast periode (jaren): ", min_value=0.0, format='%f')
 
-with col2:
-    #st.subheader("Waarde woning")
-    #home_value = st.number_input("Waarde van de woning(€): ", min_value=0.0, format='%f')
-    
+with col2:    
+    st.subheader("Rente vermenigvuldiger")
+    interest_multiplier = st.number_input("Vul in verwachte rente groei per jaar: ", min_value=0.0, format='%d')
+
     st.subheader("Looptijd hypotheek (jaren)")
     payment_years = st.number_input("Vul in totale looptijd van hypotheek (jaren): ", min_value=30, format='%d')
 
-    st.subheader("Stijging na rentevastperiode")
-    interest_rate_after = st.number_input("Vul in mogelijke stijging na rentevastperiode (%): ", min_value=0.0, format='%f')
+    #st.subheader("Stijging na rentevastperiode")
+    #interest_rate_after = st.number_input("Vul in mogelijke stijging na rentevastperiode (%): ", min_value=0.0, format='%f')
     
 
-#down_payment = home_value* (down_payment_percent / 100)
 loan_amount = total_mortgage #- down_payment
 payment_months = int(payment_years*12)
-payment_months_after = int(interest_rate_period*12)
+#payment_months_after = int(interest_rate_period*12)
 
-interest_rate = interest_rate / 100
-periodic_interest_rate = interest_rate / 12
+#interest_rate = interest_rate / 100
+#periodic_interest_rate = interest_rate / 12
 
-interest_rate_after = interest_rate_after / 100
-periodic_interest_rate_after = interest_rate_after / 12
-#previous_principal_remaining = ''
+#interest_rate_after = interest_rate_after / 100
+#periodic_interest_rate_after = interest_rate_after / 12
 
-monthly_installment = -1*npf.pmt(periodic_interest_rate , payment_months, loan_amount)
-
-#st.subheader("**Hypotheekbedrag:** €" + str(round(loan_amount, 2)))
-#st.subheader("**Bruto maandelijks bedrag:** €" + str(round(monthly_installment, 2)))
-#st.subheader("**Bruto totaal bedrag gedurene looptijd:** €" + str(round(monthly_installment*payment_months, 2)))
+#monthly_installment = -1*npf.pmt(periodic_interest_rate , payment_months, loan_amount)
 
 st.markdown("---")
 
 st.header("**Annuïteitenhypotheek afschrijvingen**")
-principal_remaining = np.zeros(payment_months)
-interest_pay_arr = np.zeros(payment_months)
-principal_pay_arr = np.zeros(payment_months)
-monthly_pay = np.zeros(payment_months)
 
-#payments in rentevastperiode
-if periodic_interest_rate_after == 0.0:
-    for i in range(0, payment_months): #payment_months):
+#loan_amount = 200000 
+#payment_months = int(30*12)
+#looptijd = 5
+#interest_percentage = 2
+#interest_multiplier = 0.2
 
-        if i == 0:
-            previous_principal_remaining = loan_amount
-        else:
-            previous_principal_remaining = principal_remaining[i-1]
-            
-        interest_payment = round(previous_principal_remaining*periodic_interest_rate, 2)
-        principal_payment = round(monthly_installment - interest_payment, 2)
-        
-        if previous_principal_remaining - principal_payment < 0:
-            principal_payment = previous_principal_remaining
-        
-        interest_pay_arr[i] = interest_payment 
-        principal_pay_arr[i] = principal_payment
-        principal_remaining[i] = previous_principal_remaining - principal_payment
-        monthly_pay[i] = monthly_installment
-
-#if periodic_interest_rate_after is not None:
-else:
-    for i in range(0, payment_months_after): #payment_months):
-
-        if i == 0:
-            previous_principal_remaining = loan_amount
-        else:
-            previous_principal_remaining = principal_remaining[i-1]
-            
-        interest_payment = round(previous_principal_remaining*periodic_interest_rate, 2)
-        principal_payment = round(monthly_installment - interest_payment, 2)
-        
-        if previous_principal_remaining - principal_payment < 0:
-            principal_payment = previous_principal_remaining
-        
-        interest_pay_arr[i] = interest_payment 
-        principal_pay_arr[i] = principal_payment
-        principal_remaining[i] = previous_principal_remaining - principal_payment
-        monthly_pay[i] = monthly_installment
-
-    payment_months_left = payment_months-payment_months_after
-    #calculate after rentevastperiode
-    previous_principal_remaining = principal_remaining[payment_months_after-1]
-    monthly_installment_after = -1*npf.pmt(periodic_interest_rate_after, payment_months_left, previous_principal_remaining)
-
-    #payments after rentevastperiode
-    for i in range(payment_months_after, payment_months):
-        previous_principal_remaining = principal_remaining[i-1]
- 
-        interest_payment_after = round(previous_principal_remaining*periodic_interest_rate_after, 2)
-        principal_payment = round(monthly_installment_after - interest_payment_after, 2)
-        
-        if previous_principal_remaining - principal_payment < 0:
-            principal_payment = previous_principal_remaining
-        
-        interest_pay_arr[i] = interest_payment_after 
-        principal_pay_arr[i] = principal_payment
-        principal_remaining[i] = previous_principal_remaining - principal_payment
-        monthly_pay[i] = monthly_installment_after
-
-#else:
-#    for i in range(payment_months_after, payment_months):
-#
-#        if i == 0:
-#            previous_principal_remaining = loan_amount
-#        else:
-#            previous_principal_remaining = principal_remaining[i-1]
-#            
-#        interest_payment = round(previous_principal_remaining*periodic_interest_rate, 2)
-#        principal_payment = round(monthly_installment - interest_payment, 2)
-#        
-#        if previous_principal_remaining - principal_payment < 0:
-#            principal_payment = previous_principal_remaining
-#        
-#        interest_pay_arr[i] = interest_payment 
-#        principal_pay_arr[i] = principal_payment
-#        principal_remaining[i] = previous_principal_remaining - principal_payment
-#        monthly_pay[i] = monthly_installment
-
-month_num = np.arange(payment_months)
-month_num = month_num + 1
-
-principal_remaining = np.around(principal_remaining, decimals=2)
-monthly_pay = np.around(monthly_pay, decimals=2)
+for index,row in df_rentes_filter.iterrows():
+    print('looptijd',index)
+    print('rente gemiddelde',row[0])
+    looptijd = index
+    interest_percentage = row[0]
+    results = calculate_hypotheek_best(interest_percentage, interest_multiplier, payment_months, loan_amount, looptijd)
 
 st.subheader("**Hypotheekbedrag:** €" + str(round(loan_amount, 2)))
 st.subheader("**Bruto maandelijks bedrag:** €" + str(round(monthly_installment, 2)))
-#st.subheader("**Bruto totaal bedrag gedurene looptijd:** €" + str(round(monthly_installment*payment_months, 2)))
 st.subheader("**Bruto totaal bedrag gedurende looptijd:** €" + str(round(np.sum(monthly_pay), 2)))
+
+st.write(results)
 
 fig = make_subplots(
     rows=2, cols=1,
