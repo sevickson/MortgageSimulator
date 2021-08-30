@@ -11,14 +11,13 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import numpy as np
 import pandas as pd
-#import numpy_financial as npf
 import hypotheekrentetarieven
 import hypotheekberekening
 
 st.set_page_config(
     page_title="Hypotheek Betaling Simulator")
 
-#st.title("Hypotheek Betaling Simulator")
+st.title("Hypotheek Betaling Simulator")
 
 st.header("**Hypotheekgegevens**")
 col1, col2 = st.columns(2)
@@ -59,36 +58,19 @@ def df_rentes():
     return(df_rentes_filter)
 df_rentes_filter = df_rentes()    
 
-loan_amount = total_mortgage #- down_payment
+loan_amount = total_mortgage 
 payment_months = int(payment_years*12)
-#payment_months_after = int(interest_rate_period*12)
-
-#interest_rate = interest_rate / 100
-#periodic_interest_rate = interest_rate / 12
-
-#interest_rate_after = interest_rate_after / 100
-#periodic_interest_rate_after = interest_rate_after / 12
-
-#monthly_installment = -1*npf.pmt(periodic_interest_rate , payment_months, loan_amount)
 
 st.markdown("---")
 
 st.header("**Annuïteitenhypotheek afschrijvingen**")
 
-#loan_amount = 200000 
-#payment_months = int(30*12)
-#looptijd = 5
-#interest_percentage = 2
-#interest_multiplier = 0.2
 lst = []
 for index,row in df_rentes_filter.iterrows():
-    #print('looptijd',index)
-    #print('rente gemiddelde',row[0])
     looptijd = index
     interest_percentage = row[0]
     rente_na, results = hypotheekberekening.calculate_hypotheek_best(interest_percentage, interest_multiplier, payment_months, loan_amount, looptijd)
-    lst.append({'looptijd': index, 'gemiddelde rente': round(row[0],2), 'gemiddelde rente na periode': round(rente_na,2), 'bruto totaal': round(results,2)})
-    #print(results)
+    lst.append({'Looptijd': index, 'Gemiddelde Rente Vaste periode': np.around(row[0], decimals=2), 'Gemiddelde Rente na Vaste periode': np.around(rente_na, decimals=2), 'Bruto Totaal Gedurende Looptijd': np.around(results, decimals=2)})
 df_all = pd.DataFrame(lst)
 
 st.subheader("**Hypotheekbedrag:** €" + str(round(loan_amount, 2)))
