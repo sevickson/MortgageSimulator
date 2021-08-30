@@ -84,10 +84,11 @@ for index,row in df_rentes_filter.iterrows():
     looptijd = index
     interest_percentage = row[0]
     results = hypotheekberekening.calculate_hypotheek_best(interest_percentage, interest_multiplier, payment_months, loan_amount, looptijd)
+    print(results)
 
 st.subheader("**Hypotheekbedrag:** €" + str(round(loan_amount, 2)))
 #st.subheader("**Bruto maandelijks bedrag:** €" + str(round(monthly_installment, 2)))
-st.subheader("**Bruto totaal bedrag gedurende looptijd:** €" + str(round(np.sum(monthly_pay), 2)))
+#st.subheader("**Bruto totaal bedrag gedurende looptijd:** €" + str(round(np.sum(monthly_pay), 2)))
 
 st.write(results)
 
